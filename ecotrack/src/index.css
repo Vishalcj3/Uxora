@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;500;600&family=Noto+Sans+Tamil:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* ---- Organic Eco design tokens (space-separated RGB for Tailwind alpha support) ---- */
+  :root {
+    --c-forest: 31 77 54;
+    --c-moss: 74 124 89;
+    --c-leaf: 143 191 127;
+    --c-sky: 94 158 163;
+    --c-cream: 247 243 233;
+    --c-card: 255 255 255;
+    --c-ink: 43 43 38;
+    --c-muted: 107 107 95;
+    --c-warn: 217 142 74;
+    /* user-customizable accent, overwritten live by the settings panel */
+    --c-accent: 74 124 89;
+    --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    --c-cream: 16 36 26;
+    --c-card: 22 49 31;
+    --c-ink: 232 240 232;
+    --c-muted: 154 173 158;
+    --c-forest: 143 191 127;
+    --c-moss: 143 191 127;
+  }
+
+  html {
+    /* Lenis drives scrolling; native smooth-scroll would fight it */
+    scroll-behavior: auto;
+  }
+
+  body {
+    @apply bg-cream text-ink font-body antialiased;
+    margin: 0;
+    background-color: rgb(var(--c-cream));
+  }
+
+  /* Language-specific typefaces so Devanagari / Tamil render properly */
+  html[lang='hi'] body { font-family: 'Noto Sans Devanagari', Inter, system-ui, sans-serif; }
+  html[lang='ta'] body { font-family: 'Noto Sans Tamil', Inter, system-ui, sans-serif; }
+
+  /* stat numbers must not jitter while counting up */
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--c-sky));
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-card/80 backdrop-blur-xl rounded-card shadow-soft border border-white/40
+           transition-all duration-300 ease-standard;
+  }
+  .dark .card { @apply border-white/10; }
+
+  /* interactive card: lifts + accent-tinted border on hover */
+  .card-hover:hover {
+    @apply shadow-lift -translate-y-1;
+    border-color: rgb(var(--c-accent) / 0.45);
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-card px-5 py-2.5
+           font-display font-semibold text-sm transition-all duration-150 ease-standard
+           select-none;
+  }
+  .btn-primary {
+    background-color: rgb(var(--c-accent));
+    @apply text-white shadow-soft;
+  }
+  .btn-primary:hover { @apply -translate-y-0.5 shadow-lift brightness-110; }
+  .btn-primary:active { @apply translate-y-0 shadow-none brightness-95; }
+
+  .btn-secondary {
+    @apply bg-transparent border-2;
+    border-color: rgb(var(--c-accent) / 0.55);
+    color: rgb(var(--c-accent));
+  }
+  .btn-secondary:hover { background-color: rgb(var(--c-accent) / 0.1); }
+
+  .btn-ghost { @apply bg-transparent text-muted relative; }
+  .btn-ghost::after {
+    content: '';
+    @apply absolute left-1/2 bottom-1 h-0.5 w-0 -translate-x-1/2 transition-all duration-200 ease-standard;
+    background-color: rgb(var(--c-accent));
+  }
+  .btn-ghost:hover { color: rgb(var(--c-accent)); }
+  .btn-ghost:hover::after { @apply w-3/5; }
+
+  .btn:disabled { @apply opacity-40 pointer-events-none shadow-none; }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-chip px-3 py-1.5 text-xs font-medium
+           transition-all duration-150 ease-standard cursor-pointer;
+    background-color: rgb(var(--c-accent) / 0.12);
+    color: rgb(var(--c-accent));
+  }
+  .chip:hover { background-color: rgb(var(--c-accent) / 0.22); @apply scale-105; }
+}
+
+/* respect reduced-motion: kill transforms/scrub, keep content readable */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* thin themed scrollbar */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: rgb(var(--c-cream)); }
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--c-accent) / 0.5);
+  border-radius: 999px;
+  border: 2px solid rgb(var(--c-cream));
+}
+::-webkit-scrollbar-thumb:hover { background: rgb(var(--c-accent) / 0.8); }

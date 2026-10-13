@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build output
+dist/
+**/dist/
+dist-ssr/
+*.local
+
+# Brag / promo video output (not part of the codebase)
+brag-output/
+**/brag-output/
+
+# Agent / editor
+.claude/
+.vscode/
+.idea/
+
+# Logs & caches
+*.log
+.cache/
+.DS_Store
+Thumbs.db
